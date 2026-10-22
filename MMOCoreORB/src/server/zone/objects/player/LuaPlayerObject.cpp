@@ -53,6 +53,7 @@ Luna<LuaPlayerObject>::RegType LuaPlayerObject::Register[] = {
 		{ "setJediState", &LuaPlayerObject::setJediState },
 		{ "getJediState", &LuaPlayerObject::getJediState },
 		{ "isOnline", &LuaPlayerObject::isOnline },
+		{ "isOnLoadScreen", &LuaPlayerObject::isOnLoadScreen },
 		{ "activateJournalQuest", &LuaPlayerObject::activateJournalQuest },
 		{ "completeJournalQuest", &LuaPlayerObject::completeJournalQuest },
 		{ "clearJournalQuest", &LuaPlayerObject::clearJournalQuest },
@@ -446,6 +447,12 @@ int LuaPlayerObject::getJediState(lua_State* L) {
 
 int LuaPlayerObject::isOnline(lua_State* L) {
 	lua_pushboolean(L, realObject->isOnline());
+
+	return 1;
+}
+
+int LuaPlayerObject::isOnLoadScreen(lua_State* L) {
+	lua_pushboolean(L, realObject->isOnLoadScreen());
 
 	return 1;
 }

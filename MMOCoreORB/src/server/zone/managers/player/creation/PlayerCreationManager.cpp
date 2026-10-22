@@ -8,6 +8,8 @@
 #include "server/zone/managers/player/PlayerManager.h"
 #include "server/login/packets/ErrorMessage.h"
 #include "server/chat/ChatManager.h"
+#include "server/chat/StringIdChatParameterVector.h"
+#include "server/chat/WaypointChatParameterVector.h"
 #include "server/chat/room/ChatRoom.h"
 #include "server/login/account/Account.h"
 #include "server/zone/objects/player/sui/messagebox/SuiMessageBox.h"
@@ -612,6 +614,22 @@ bool PlayerCreationManager::createCharacter(ClientCreateCharacterCallback* callb
 
 	// Welcome Mail
 	chatManager->sendMail("system", "@newbie_tutorial/newbie_mail:welcome_subject", "@newbie_tutorial/newbie_mail:welcome_body", playerCreature->getFirstName());
+
+	// Invite new characters to accept the Legacy quest from Han in Mos Eisley.
+	ghost->setScreenPlayData("LegacyMosEisley", "arrivalInvitation", "pending");
+	StringIdChatParameterVector legacyBodyParameters;
+	WaypointChatParameterVector legacyWaypoints;
+	WaypointChatParameter cantinaWaypoint;
+	cantinaWaypoint.set("Chalmun's Cantina - Han Solo", 3467.8815f, 5.0f, -4852.2944f, STRING_HASHCODE("tatooine"));
+	legacyWaypoints.add(cantinaWaypoint);
+
+	UnicodeString legacySubject("A Speeder For Me");
+	UnicodeString legacyBody("Need a way to get around? I may be able to help.\n\n"
+			"Find me with Chewbacca inside Chalmun's cantina in Mos Eisley on Tatooine. "
+			"Talk to me when you are ready to begin A Speeder For Me.\n\n"
+			"The attached waypoint marks the cantina entrance. Chewbacca and I are in a side alcove further inside.\n\n"
+			"- Han Solo");
+	chatManager->sendMail("Han Solo", legacySubject, legacyBody, playerCreature->getFirstName(), &legacyBodyParameters, &legacyWaypoints);
 
 	// Schedule Task to send out JTL Recruitment Mail
 	SendJtlRecruitment* jtlMailTask = new SendJtlRecruitment(playerCreature);

@@ -57,6 +57,7 @@ namespace player {
 		int setJediState(lua_State* L);
 		int getJediState(lua_State* L);
 		int isOnline(lua_State* L);
+		int isOnLoadScreen(lua_State* L);
 		int activateJournalQuest(lua_State* L);
 		int completeJournalQuest(lua_State* L);
 		int clearJournalQuest(lua_State* L);

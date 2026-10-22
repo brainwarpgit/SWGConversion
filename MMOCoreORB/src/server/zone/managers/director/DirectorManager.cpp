@@ -2178,6 +2178,11 @@ int DirectorManager::getRegion(lua_State* L) {
 	}
 
 	SceneObject* region = planetMan->getRegion(regionName);
+	if (region == nullptr) {
+		CityRegion* cityRegion = planetMan->getCityRegion(regionName);
+		if (cityRegion != nullptr && cityRegion->getRegionsCount() > 0)
+			region = cityRegion->getRegion(0);
+	}
 
 	if (region == nullptr) {
 		lua_pushnil(L);

@@ -1,0 +1,5 @@
+includeFile("../custom_scripts/mobile/conversations/legacy_han_conv.lua")
+includeFile("../custom_scripts/mobile/conversations/legacy_pall_conv.lua")
+includeFile("../custom_scripts/mobile/conversations/legacy_vourk_conv.lua")
+includeFile("../custom_scripts/mobile/conversations/legacy_mayor_conv.lua")
+includeFile("../custom_scripts/mobile/legacy_mos_eisley.lua")

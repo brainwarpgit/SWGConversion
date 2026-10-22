@@ -6,6 +6,9 @@ function PlayerTriggers:playerLoggedIn(pPlayer)
 	end
 	ServerEventAutomation:playerLoggedIn(pPlayer)
 	BestineElection:playerLoggedIn(pPlayer)
+	if LegacyMosEisley ~= nil then
+		LegacyMosEisley:playerLoggedIn(pPlayer)
+	end
 end
 
 function PlayerTriggers:playerLoggedOut(pPlayer)
@@ -13,4 +16,7 @@ function PlayerTriggers:playerLoggedOut(pPlayer)
 		return
 	end
 	ServerEventAutomation:playerLoggedOut(pPlayer)
+	if LegacyMosEisley ~= nil then
+		LegacyMosEisley:playerLoggedOut(pPlayer)
+	end
 end
