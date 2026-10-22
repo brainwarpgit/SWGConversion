@@ -23,6 +23,7 @@ namespace ai {
 class CreatureTemplate : public Object {
 protected:
 	String templateName;
+	uint32 questMarkerQuest = 0;
 	String customName;
 
 	unsigned int armor;
@@ -369,6 +370,8 @@ public:
 	inline int getTotalHues() const {
 		return hues.size();
 	}
+
+	inline uint32 getQuestMarkerQuest() const { return questMarkerQuest; }
 
 	inline int getAggroRadius() const {
 		return aggroRadius;

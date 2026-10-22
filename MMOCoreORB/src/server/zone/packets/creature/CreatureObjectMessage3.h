@@ -10,7 +10,7 @@
 
 class CreatureObjectMessage3 : public TangibleObjectMessage3 {
 public:
-	CreatureObjectMessage3(CreatureObject* creo) : TangibleObjectMessage3(creo, 0x4352454F, 0x12) {
+	CreatureObjectMessage3(CreatureObject* creo, const uint32* viewerOptions = nullptr) : TangibleObjectMessage3(creo, 0x4352454F, 0x12, viewerOptions) {
 
 		insertByte(creo->getPosture());
 		insertByte(creo->getFactionRank()); // faction rank

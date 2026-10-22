@@ -32,6 +32,7 @@ namespace ai {
 
 		int _setObject(lua_State* L);
 		int setAITemplate(lua_State* L);
+		int sendQuestMarkerTo(lua_State* L);
 		int setFollowObject(lua_State* L);
 		int setOblivious(lua_State* L);
 		int setWatchObject(lua_State* L);

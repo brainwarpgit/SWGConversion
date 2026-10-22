@@ -1,9 +1,9 @@
 -- The NPCs are noncombatants. Quest progression is handled by the screenplay.
 local questNpcs = {
-	{ "legacy_pall", "Pall", "majolnir", "legacy_pall_conv" },
-	{ "legacy_vourk", "Vourk ver'Zremp", "dressed_tatooine_opening_santos", "legacy_vourk_conv" },
-	{ "legacy_mos_eisley_mayor", "Mayor Mikdanyell Guh'rantt", "dressed_mayor_mikdanyell_guhrantt", "legacy_mayor_conv" },
-	{ "legacy_han_solo", "Han Solo", "han_solo", "legacy_han_conv" },
+	{ "legacy_pall", "Pall", "majolnir", "legacy_pall_conv", 1, "quest/find_majolnir" },
+	{ "legacy_vourk", "Vourk ver'Zremp", "dressed_tatooine_opening_santos", "legacy_vourk_conv", 1, "quest/tatooine_eisley_legacy" },
+	{ "legacy_mos_eisley_mayor", "Mayor Mikdanyell Guh'rantt", "dressed_mayor_mikdanyell_guhrantt", "legacy_mayor_conv", 1, "quest/tatooine_eisley_gotomayor" },
+	{ "legacy_han_solo", "Han Solo", "han_solo", "legacy_han_conv", 1, "quest/speeder_quest" },
 	{ "legacy_chewbacca", "Chewbacca", "chewbacca", "", 1.27 },
 }
 
@@ -22,6 +22,7 @@ for _, npc in ipairs(questNpcs) do
 		optionsBitmask = AIENABLED + (npc[4] ~= "" and (CONVERSABLE + INTERESTING) or 0),
 		diet = HERBIVORE,
 		scale = npc[5] or 1,
+		questMarkerQuest = npc[6] or "",
 		templates = { "object/mobile/" .. npc[3] .. ".iff" },
 		conversationTemplate = npc[4],
 	}, npc[1])

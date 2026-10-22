@@ -19,6 +19,7 @@
 #include "server/zone/ZoneClientSession.h"
 #include "server/zone/packets/creature/CreatureObjectMessage1.h"
 #include "server/zone/packets/creature/CreatureObjectMessage3.h"
+#include "server/zone/objects/creature/ai/QuestMarker.h"
 #include "server/zone/packets/creature/CreatureObjectMessage4.h"
 #include "server/zone/packets/creature/CreatureObjectMessage6.h"
 #include "server/zone/packets/creature/CreatureObjectDeltaMessage1.h"
@@ -482,7 +483,8 @@ void CreatureObjectImplementation::sendBaselinesTo(SceneObject* player) {
 		player->sendMessage(msg);
 	}
 
-	CreatureObjectMessage3* msg3 = new CreatureObjectMessage3(thisPointer);
+	uint32 viewerOptions = questMarkerOptions(thisPointer, player->isCreatureObject() ? player->asCreatureObject() : nullptr);
+	CreatureObjectMessage3* msg3 = new CreatureObjectMessage3(thisPointer, &viewerOptions);
 	player->sendMessage(msg3);
 
 	if (player == thisPointer) {

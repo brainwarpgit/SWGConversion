@@ -1,4 +1,5 @@
 Creature = {
+	questMarkerQuest = "",
 	objectName = "",
 	socialGroup = "",
 	faction = "",

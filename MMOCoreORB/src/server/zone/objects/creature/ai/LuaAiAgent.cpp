@@ -6,6 +6,8 @@
  */
 
 #include "LuaAiAgent.h"
+#include "QuestMarker.h"
+#include "server/zone/packets/creature/CreatureObjectDeltaMessage3.h"
 
 #include <engine/core/ManagedReference.h>
 #include <system/lang/ref/Reference.h>
@@ -30,6 +32,7 @@ Luna<LuaAiAgent>::RegType LuaAiAgent::Register[] = {
 		{ "_setObject", &LuaAiAgent::_setObject },
 		{ "_getObject", &LuaSceneObject::_getObject },
 		{ "setAITemplate", &LuaAiAgent::setAITemplate },
+		{ "sendQuestMarkerTo", &LuaAiAgent::sendQuestMarkerTo },
 		{ "setFollowObject", &LuaAiAgent::setFollowObject },
 		{ "setOblivious", &LuaAiAgent::setOblivious },
 		{ "setWatchObject", &LuaAiAgent::setWatchObject },
@@ -1072,4 +1075,17 @@ int LuaAiAgent::setHamRegenDisabled(lua_State* L) {
 	realObject->setHamRegenDisabled(regenDisabled);
 
 	return 0;
+}
+
+int LuaAiAgent::sendQuestMarkerTo(lua_State* L) {
+    auto viewer = static_cast<SceneObject*>(lua_touserdata(L, -1));
+    auto definition = realObject->getCreatureTemplate();
+    if (viewer == nullptr || !viewer->isPlayerCreature() || definition == nullptr
+            || definition->getQuestMarkerQuest() == 0)
+        return 0;
+    auto delta = new CreatureObjectDeltaMessage3(realObject);
+    delta->updateCreatureBitmask(questMarkerOptions(realObject, viewer->asCreatureObject()));
+    delta->close();
+    viewer->sendMessage(delta);
+    return 0;
 }

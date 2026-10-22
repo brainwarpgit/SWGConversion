@@ -20,3 +20,7 @@
 - Adjusted seated Han to heading 62 degrees and Chewbacca to local (15.7, -0.9, -21), heading 26 degrees.
 
 - Added the existing PRECU overhead interest marker to the four conversational Legacy quest contacts.
+
+- Added opt-in player-specific completion markers for Han, Pall, Vourk, and the mayor; other NPC marker behavior is preserved.
+
+- Excluded the local PRECU game client inspection folder from Git.

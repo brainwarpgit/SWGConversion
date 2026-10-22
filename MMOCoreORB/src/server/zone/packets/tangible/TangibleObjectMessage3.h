@@ -15,7 +15,7 @@
 
 class TangibleObjectMessage3 : public BaseLineMessage {
 public:
-	TangibleObjectMessage3(TangibleObject* tano, uint32 objType = 0x54414E4F, uint16 opcnt = 0x0B)
+	TangibleObjectMessage3(TangibleObject* tano, uint32 objType = 0x54414E4F, uint16 opcnt = 0x0B, const uint32* viewerOptions = nullptr)
 			: BaseLineMessage(tano, objType, 3, opcnt) {
 		insertFloat(tano->getComplexity());
 
@@ -47,7 +47,7 @@ public:
 		auto visibleComponents = tano->getVisibleComponents();
 		visibleComponents->insertToMessage(this);
 
-		insertInt(tano->getOptionsBitmask());
+		insertInt(viewerOptions != nullptr ? *viewerOptions : tano->getOptionsBitmask());
 
 		insertInt(tano->getUseCount()); //item count
 

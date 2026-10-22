@@ -179,3 +179,44 @@ User verification should cover:
 
 - User confirmed all work through the current Legacy quest endpoint is verified and requested a commit. The implemented four-quest milestone and its delivered corrections are GAME_VALIDATED on that confirmation, superseding earlier pending verification notes for this scope. No remaining validation checklist for this milestone; future quests and proposed per-player markers are outside it.
 - Committing the approved server changes, client staging assets, and update histories. AGENTS.md is excluded under its explicit-inclusion rule; ignored config-local.lua remains local. No server/compiler/TRE build was performed by the agent. TRE rebuilds: None newly required by this verification/commit operation.
+
+### Player-specific Legacy quest markers
+
+- User approved opt-in markers for the four Legacy contacts. Added optional creature-template questMarkerQuest, default empty for existing mobiles. Han maps to quest/speeder_quest, Pall to quest/find_majolnir, Vourk to quest/tatooine_eisley_legacy, and the mayor to quest/tatooine_eisley_gotomayor. Chewbacca and all other quest definitions are unchanged.
+- Added reusable QuestMarker.h presentation helper. It clears only INTERESTING for a viewer whose native journal has completed the configured quest; the NPC's shared options are never mutated. Markers otherwise retain their existing always-visible interest behavior, rather than introducing availability/turn-in stages.
+- Creature baseline packets accept optional per-viewer options, calculated on the normal sendBaselinesTo path. This covers initial visibility, reconnects, and returning to the NPC. Existing unconfigured creatures retain identical option values.
+- Added LuaAiAgent.sendQuestMarkerTo using the existing CREO delta options field, delivered to one viewer. The quest runtime refreshes opted-in contacts after native journal completion; login also refreshes nearby contacts. Quest identities, rewards, progression, and shared NPC flags remain unchanged. Existing Core3 quests require no migration.
+- STATIC_VALIDATED: four Lua files passed load-only syntax; native metadata/getter/registration, CREO baseline/delta field consistency, baseline call sites, and whitespace reviewed. No test/mock files or gameplay execution. C++ compilation and runtime/in-game validation remain pending.
+- Required user validation: build Core3 and restart; use two characters at different quest stages and confirm completing each contact's associated quest removes only that character's marker. Verify relogging, leaving/returning, indoor Han/mayor visibility, and an existing unrelated quest NPC retaining its marker. Markers should remain for players who have not completed the associated quest, including before it is offered.
+- TRE rebuilds: None. No client assets, staging folders, rotations, or configuration changes. Git status: uncommitted.
+
+### Legacy-only rust marker compatibility analysis
+
+- User approved a rust circle/white exclamation marker limited to the four Legacy contacts, preserving existing Core3 blue markers. Identified PRECU appearance/info_disk.apt -> appearance/info_disk.msh -> shader/info_disk_as8.sht -> texture/info_disk.dds; NGE/MTG retain the same shared resource paths. Replacing these shared paths would affect unrelated NPCs and is not authorized.
+- The existing options flag has no per-NPC appearance-path selector. A separate per-viewer visual needs an attachment/removal mechanism in addition to cloned assets. Current Core3 PlayClientEffectObjectMessage sends file/hardpoint/object only; original NGE adds a label and StopClientEffectObjectByLabelMessage. PRECU 14.1 support for that newer lifecycle is not established by the available references. Do not import the NGE protocol or claim a reliable private marker without resolving this dependency.
+- Earlier recommendation understated this client compatibility requirement. Status: ANALYZED, with attachment/removal compatibility unresolved. No rust assets staged, server implementation changed, or runtime tests performed in this analysis. Existing player-specific blue marker changes remain separately uncommitted. TRE rebuilds: None for this analysis.
+
+### PRECU QUESTING flag feasibility check
+
+- At the user's request, traced the existing Core3/PRECU flag path rather than assuming client effects are required. CreatureTemplateManager exports INTERESTING=0x00000800 and JTLINTERESTING=0x00008000; mobile options are serialized as an integer in tangible/creature baseline 3 and its delta. These messages carry no flag-to-appearance mapping or custom marker texture path.
+- A new QUESTING constant and Lua export can be added server-side, but the client must recognize the selected bit and choose the rust asset. No QUESTING implementation or configurable flag-to-marker appearance mapping was found in the authorized target/MTG references or extracted PRECU misc/datatables/UI resources. HOLIDAY_INTERESTING exists as a named bit but its PRECU client behavior is not established; do not repurpose it blindly.
+- Available swg-main client subtree lacks the client-game marker renderer; authorized extracted client folders contain data assets but no client executable/source implementing this mapping. Therefore this inspection establishes the server change alone is insufficient, not proof that a client extension is impossible. A client-side mapping hook/source or verified spare marker slot is the unresolved dependency.
+- No server code or client assets changed by this investigation. TRE rebuilds: None.
+
+### PRECU executable marker inspection and Git exclusion
+
+- User provided treupdates/PRECUGame and authorized read-only inspection, then requested its Git exclusion. Added root .gitignore entry /treupdates/PRECUGame/. No client files were modified or executed; no files from that directory were already tracked.
+- Inspected SWGEmu.exe (SHA256 b7c3b11838cffa48bce10d45c8f5be139d71e729b1020fc7b7d0e4961b737c25) as PE/i386 using static string cross-references and disassembly. Marker routine at virtual address0x00640c80 checks option bits11 and15 (0x800 INTERESTING and0x8000 JTLINTERESTING), then selects hard-coded appearance/info_disk.apt or appearance/space_info_disk.apt at0x00640d57–0x00640d68. With neither bit set it exits without creating a marker. The ordinary marker has no table-based appearance selector in this routine; a new QUESTING bit alone is insufficient for this supplied executable.
+- A third independently selected native marker would require a client renderer extension/hook or binary modification, plus a separate appearance/shader/texture chain. No executable modification is authorized or performed by this inspection. Existing two marker paths remain untouched, preserving normal/JTL marker behavior.
+- Static ignore/whitespace checks performed. Rust marker remains unimplemented pending a client-extension approach; this finding supersedes the previous uncertainty about the native marker's selection path. TRE rebuilds: None for inspection/ignore changes. Git status: uncommitted.
+
+### Marker testing and rust-marker scope decision
+
+- User chose to leave the rust/custom marker work aside and retain the current blue marker behavior. No client extension, executable patch, or rust assets will be introduced under this request.
+- User reports in-game testing shows icons only over quest NPCs ready for the quest, with icons absent before readiness and after completion. Recorded as user-observed behavior for the tested cases; this does not establish untested quest-state combinations or change the implementation's explicit completion-based filtering.
+- No implementation/client asset changes. TRE rebuilds: None. Existing player-specific marker implementation remains uncommitted.
+
+### Player-specific marker verification and commit
+
+- User confirmed verification and explicitly requested committing all pending work including AGENTS.md. Player-specific blue marker behavior is GAME_VALIDATED for the reported tests. Rust-marker implementation remains set aside; no client files or custom marker assets are included.
+- Commit includes opt-in marker code, standing project guidance, client-folder Git exclusion, and update histories. No remaining validation requested for this verified scope. TRE rebuilds: None newly required.

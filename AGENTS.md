@@ -16,6 +16,8 @@
 - Extend Core3 C++ only when necessary for required functionality.
 - Do not import NGE combat, professions, or unrelated gameplay systems unless explicitly requested or necessary for approved content.
 - Preserve original NGE content behavior where compatible with PRECU mechanics.
+- Follow PRECU sandbox-style quest progression rather than NGE level-gated progression.
+- Allow players to attempt challenging NGE content without artificial character-level restrictions while preserving meaningful quest prerequisites.
 - Prefer reusable conversion solutions over one-off implementations.
 - Prioritize complete, playable content over simply loading assets or registering templates.
 - Do not expand beyond the user-approved conversion scope.
@@ -221,9 +223,11 @@ Use the following states when reporting significant content conversion progress:
 - Add new TRE archive entries to both configuration files when required, using the correct existing configuration syntax.
 - Newer staging TREs must take precedence over older TREs.
 - Maintain staging series order:
-  1. `Core3_appearance_XX`
+  1. `Core3_update_XX`
   2. `Core3_texture_XX`
-  3. `Core3_update_XX`
+  3. `Core3_appearance_XX`
+- Keep resource paths separate across staging series; appearances and textures must not override each other, and update archives must not contain appearance or texture resources.
+- Validate that no client-relative resource path occurs in more than one staging series.
 - Within each series, list higher numbers before lower numbers.
 - Preserve all existing base/client TRE entries.
 - Verify actual TRE loading and override precedence before changing configuration.
@@ -285,6 +289,8 @@ Use the following states when reporting significant content conversion progress:
 ## World and Quest Compatibility
 
 - Treat client scenery, static server objects, interactive objects, mobiles, and spawn populations as separate conversion concerns.
+- Whenever analyzing, converting, or correcting a quest, explicitly check the world content around every objective, contact, and encounter. Compare original NGE snapshots/buildouts and MTG references against the current PRECU/Core3 world for missing scenery, buildings, cells, contained objects, interactive objects, and spawn populations.
+- Include required world placements and their dependencies in the quest's conversion scope and validation. Do not assume spawning the quest NPCs and objective objects restores the surrounding quest environment; report missing world content before claiming the quest is complete.
 - Identify original NGE terrain, world placements, snapshots, buildouts, containment relationships, cell IDs, and coordinates.
 - Preserve interior/exterior relationships and building cell assignments.
 - Identify server-controlled objects requiring gameplay logic or persistence.
@@ -293,11 +299,37 @@ Use the following states when reporting significant content conversion progress:
 - Preserve original NGE quests, conversations, prerequisites, objectives, triggers, rewards, and completion behavior where compatible with PRECU.
 - Maintain quest dependency chains and progression relationships.
 - Translate unsupported NGE mechanics into existing PRECU mechanics when possible without changing quest intent.
+- Remove NGE character-level quest restrictions by default while preserving meaningful faction, profession, reputation, and quest-chain prerequisites.
+- Preserve original NGE level requirements as reference data for encounter difficulty and reward balancing.
+- Do not introduce artificial progression gates to replace removed NGE level requirements.
 - Prefer reusable Core3 quest handlers for standard objectives.
 - Implement specialized behavior only when necessary.
 - Do not silently remove objectives, conditions, rewards, or interactions because Core3 lacks an equivalent.
 - Report unsupported quest requirements and required server/client changes.
 - Never classify a quest as fully playable until its complete objective chain and rewards have been verified in-game.
+
+## NGE Level and Progression Compatibility
+
+- Preserve original NGE level requirements as reference information.
+- Follow PRECU quest eligibility and progression conventions rather than NGE combat-level restrictions.
+- Do not introduce NGE character levels, artificial progression tiers, or new leveling systems into Core3.
+- Remove NGE minimum and maximum character-level restrictions by default.
+- Allow characters to accept quests regardless of combat level unless an explicit gameplay requirement justifies restricting access.
+- Preserve original quest-chain prerequisites, required quest completion, faction restrictions, reputation requirements, and appropriate profession-specific requirements.
+- Preserve meaningful quest-specific unlock conditions and branching behavior.
+- Do not impose profession restrictions on quests that were originally available to all professions.
+- Investigate existing Core3 quest eligibility, skill, certification, and combat-level functionality before implementing compatibility changes.
+- Preserve original NGE enemy difficulty as reference information.
+- Adapt enemy HAM, damage, abilities, and combat behavior to PRECU mechanics without enforcing NGE combat-level requirements.
+- Do not artificially scale enemy difficulty based on player level.
+- Adapt NGE weapon, armor, and equipment requirements to existing PRECU certifications where appropriate.
+- Remove NGE item-level restrictions by default unless required for balance or functionality.
+- Preserve original quest rewards wherever possible, adapting attributes to PRECU mechanics.
+- Do not automatically replace level restrictions with skill-box or profession requirements.
+- If removing a level restriction breaks quest progression, branching, or intended functionality, identify the issue and propose a compatible alternative.
+- Prefer existing Core3 progression and eligibility mechanisms over creating new systems.
+- Do not modify existing PRECU professions, skill progression, certification systems, or combat mechanics unless explicitly approved.
+- Report original NGE level requirements and any proposed exceptions during conversion analysis.
 
 ## TRE Rebuild Requirements
 
@@ -385,6 +417,7 @@ Use the following states when reporting significant content conversion progress:
 2. Search `MTGServer` and `extracted-MTG` for previously converted implementations and assets.
 3. Identify corresponding functionality already present in SWGConversion.
 4. Identify all direct and transitive server/client dependencies.
+   For quests, explicitly compare snapshots/buildouts and world populations around every objective, contact, and encounter; account for missing scenery, buildings, cells, containment, interactive objects, and spawns.
 5. Compare original NGE behavior against existing Core3 and MTG implementations.
 6. Compare client asset formats, versions, internal references, and dependency relationships against PRECU compatibility requirements.
 7. Identify reusable conversion patterns and existing compatible implementations.

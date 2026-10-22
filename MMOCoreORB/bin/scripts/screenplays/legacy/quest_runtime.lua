@@ -92,6 +92,7 @@ function Runtime:advance(owner, pPlayer, quest, step)
 	ghost:completeJournalQuestTask(crc, step, true)
 	if step == #quest.tasks then
 		ghost:completeJournalQuest(crc, true)
+		if owner.refreshQuestMarkers ~= nil then owner:refreshQuestMarkers(pPlayer) end
 	else
 		ghost:activateJournalQuestTask(crc, step + 1, true)
 	end

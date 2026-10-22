@@ -134,6 +134,8 @@ void CreatureTemplate::readObject(LuaObject* templateData) {
 	creatureBitmask = templateData->getIntField("creatureBitmask");
 	diet = templateData->getIntField("diet");
 	optionsBitmask = templateData->getIntField("optionsBitmask");
+	String markerQuest = templateData->getStringField("questMarkerQuest");
+	questMarkerQuest = markerQuest.isEmpty() ? 0 : markerQuest.hashCode();
 	patrolPathTemplate = templateData->getStringField("patrolPathTemplate");
 	defaultWeapon = templateData->getStringField("defaultWeapon");
 	tauntable = templateData->getBooleanField("tauntable", true);

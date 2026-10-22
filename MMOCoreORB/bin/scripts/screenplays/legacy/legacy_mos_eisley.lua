@@ -506,6 +506,7 @@ function LegacyMosEisley:closeArrivalInvitation(pPlayer, pSui, eventIndex)
 end
 
 function LegacyMosEisley:playerLoggedIn(pPlayer)
+	self:refreshQuestMarkers(pPlayer)
 	if self:hasStarted(pPlayer) then self:resume(pPlayer) end
 	self:scheduleArrivalInvitation(pPlayer)
 end
@@ -535,3 +536,14 @@ includeFile("legacy/conversations/legacy_pall.lua")
 includeFile("legacy/conversations/legacy_han.lua")
 includeFile("legacy/conversations/legacy_vourk.lua")
 includeFile("legacy/conversations/legacy_mayor.lua")
+
+function LegacyMosEisley:refreshQuestMarkers(pPlayer)
+    if Runtime:ghost(pPlayer) == nil then return end
+    for _, role in ipairs({"han", "pall", "vourk", "mayor"}) do
+        local pNpc = getSceneObject(readData(self.screenplayName .. ":npc:" .. role))
+        if pNpc ~= nil and LuaSceneObject(pNpc):getZoneName() == LuaSceneObject(pPlayer):getZoneName()
+            and LuaSceneObject(pNpc):isInRangeWithObject3d(pPlayer, 128) then
+            LuaAiAgent(pNpc):sendQuestMarkerTo(pPlayer)
+        end
+    end
+end
