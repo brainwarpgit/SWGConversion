@@ -4,3 +4,5 @@ luacov.stats.out
 .DS_Store
 .cache
 compile_commands.json
+config-local.lua
+/MMOCoreORB/bin/scripts/managers/resource_manager_spawns.lua
